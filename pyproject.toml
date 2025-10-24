@@ -1,0 +1,15 @@
+[tool.black]
+line-length = 88        # Longitud máxima de línea
+target-version = ['py310']  # Ajusta según tu versión de Python
+include = '\.pyi?$'     # Solo archivos .py
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"       # Para que isort (ordenar imports) sea compatible con Black
