@@ -37,11 +37,9 @@ def listar_notas(db: Session):
             "valor": n.valor,
             "fecha_creacion": n.fecha_creacion,
 
-            # Materia
             "materia_id": n.materia_id,
             "materia_nombre": n.materia.nombre if n.materia else "Sin materia",
 
-            # Estudiante
             "estudiante_id": n.estudiante_id,
             "estudiante_nombre": (
                 n.estudiante.persona.nombre
@@ -49,7 +47,6 @@ def listar_notas(db: Session):
                 else "Sin estudiante"
             ),
 
-            # Profesor
             "profesor_id": (
                 n.materia.profesor_id
                 if n.materia and n.materia.profesor_id
