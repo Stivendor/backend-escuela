@@ -21,10 +21,11 @@ def crear_nota(nota: NotaCreate, db: Session = Depends(get_db)):
     return nueva
 
 
-@router.get("/", response_model=list[NotaResponse])
+@router.get("/")
 def listar_notas(db: Session = Depends(get_db)):
     """
-    Lista todas las notas registradas.
+    Lista todas las notas registradas, incluyendo los nombres de materia,
+    estudiante y profesor.
     """
     return crud_nota.listar_notas(db)
 
