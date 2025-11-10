@@ -16,4 +16,8 @@ class Profesor(Base):
     )
     especialidad = Column(String(100), nullable=False)
 
-    persona = relationship("Persona", backref="profesor")
+    # ✅ Relaciones
+    persona = relationship("Persona", back_populates="profesor")
+    materias = relationship("Materia", back_populates="profesor")
+    notas = relationship("Nota", back_populates="profesor")
+

@@ -17,4 +17,19 @@ class Estudiante(Base):
     carrera = Column(String(100), nullable=False)
     semestre = Column(Integer, nullable=False)
 
+    # 🔹 Relaciones
     persona = relationship("Persona", backref="estudiante")
+
+    # ✅ Relación con Nota (imprescindible)
+    notas = relationship("Nota", back_populates="estudiante", cascade="all, delete-orphan")
+
+    # ✅ Relación con Materia (por la tabla intermedia materia_estudiante)
+    materias = relationship(
+    "Materia",
+    secondary="materia_estudiante",
+    back_populates="estudiantes"  # 👈 CAMBIO AQUÍ
+)
+
+
+    def __repr__(self):
+        return f"<Estudiante(id_estudiante={self.id_estudiante}, carrera='{self.carrera}', semestre={self.semestre})>"
