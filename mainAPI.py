@@ -37,11 +37,12 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # En producción, usar dominios específicos
+    allow_origins=["http://localhost:4200"],  # 👈 URL de tu frontend Angular
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 app.include_router(auditoria.router, prefix="/auditorias", tags=["Auditoría"])
 app.include_router(estudiante.router, prefix="/estudiantes", tags=["Estudiantes"])
