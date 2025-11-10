@@ -14,22 +14,35 @@ class Nota(Base):
     )
 
     estudiante_id = Column(
-        UUID(as_uuid=True), ForeignKey("estudiantes.id_estudiante"), nullable=False
+        UUID(as_uuid=True),
+        ForeignKey("estudiantes.id_estudiante", ondelete="CASCADE"),
+        nullable=False,
     )
+
     profesor_id = Column(
-        UUID(as_uuid=True), ForeignKey("profesores.id_profesor"), nullable=True
+        UUID(as_uuid=True),
+        ForeignKey("profesores.id_profesor", ondelete="SET NULL"),  # ✅ más seguro
+        nullable=True,
     )
+
     materia_id = Column(
-        UUID(as_uuid=True), ForeignKey("materias.id_materia"), nullable=False
+        UUID(as_uuid=True),
+        ForeignKey("materias.id_materia", ondelete="CASCADE"),
+        nullable=False,
     )
 
     valor = Column(Float, nullable=False)
 
     fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
 
-    estudiante = relationship("Estudiante", backref="notas")
-    profesor = relationship("Profesor", backref="notas")
+    # 🔹 Relaciones bidireccionales
+    estudiante = relationship("Estudiante", back_populates="notas")
+    profesor = relationship("Profesor", back_populates="notas")
     materia = relationship("Materia", back_populates="notas")
 
     def __repr__(self):
-        return f"<Nota(id_nota={self.id_nota}, estudiante_id={self.estudiante_id}, materia_id={self.materia_id}, valor={self.valor})>"
+        return (
+            f"<Nota(id_nota={self.id_nota}, estudiante_id={self.estudiante_id}, "
+            f"materia_id={self.materia_id}, valor={self.valor})>"
+        )
+

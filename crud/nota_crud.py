@@ -6,20 +6,26 @@ from models.materia import Materia
 from models.persona import Persona
 
 
-def create_nota(db: Session, estudiante_id: str, materia_id: str, valor: float):
+def create_nota(db: Session, estudiante_id: str, materia_id: str, valor: float, profesor_id: str = None):
     """
     Crea una nueva nota en la base de datos.
     """
-    nueva_nota = Nota(estudiante_id=estudiante_id, materia_id=materia_id, valor=valor)
+    nueva_nota = Nota(
+        estudiante_id=estudiante_id,
+        materia_id=materia_id,
+        profesor_id=profesor_id,  # ✅ ahora lo guarda correctamente
+        valor=valor
+    )
     db.add(nueva_nota)
     db.commit()
     db.refresh(nueva_nota)
     return nueva_nota
 
 
+
 def listar_notas(db: Session):
     """
-    Lista todas las notas incluyendo los nombres de materia, estudiante y profesor.
+    Lista todas las notas con nombres de materia, estudiante y profesor.
     """
     notas = (
         db.query(Nota)
@@ -62,22 +68,38 @@ def listar_notas(db: Session):
     return resultado
 
 
-def actualizar_nota(db: Session, id_nota: str, valor: float = None):
+def actualizar_nota(
+    db: Session,
+    id_nota: str,
+    valor: float = None,
+    materia_id: str = None,
+    estudiante_id: str = None,
+    profesor_id: str = None,
+):
     """
-    Actualiza el valor de una nota existente.
+    Actualiza los campos de una nota existente.
     """
     nota = db.query(Nota).filter(Nota.id_nota == id_nota).first()
-    if nota:
-        if valor is not None:
-            nota.valor = valor
-        db.commit()
-        db.refresh(nota)
+    if not nota:
+        return None
+
+    if valor is not None:
+        nota.valor = valor
+    if materia_id is not None:
+        nota.materia_id = materia_id
+    if estudiante_id is not None:
+        nota.estudiante_id = estudiante_id
+    if profesor_id is not None:
+        nota.profesor_id = profesor_id
+
+    db.commit()
+    db.refresh(nota)
     return nota
 
 
 def eliminar_nota(db: Session, id_nota: str):
     """
-    Elimina una nota de la base de datos por ID.
+    Elimina una nota por ID.
     """
     nota = db.query(Nota).filter(Nota.id_nota == id_nota).first()
     if nota:
