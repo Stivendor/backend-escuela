@@ -4,6 +4,7 @@ from models.estudiante import Estudiante
 from models.profesor import Profesor
 from models.materia import Materia
 from models.persona import Persona
+from sqlalchemy import func
 
 
 def create_nota(db: Session, estudiante_id: str, materia_id: str, valor: float, profesor_id: str = None):
@@ -23,18 +24,29 @@ def create_nota(db: Session, estudiante_id: str, materia_id: str, valor: float, 
 
 
 
-def listar_notas(db: Session):
+def listar_notas(db: Session, materia: str | None = None, estudiante: str | None = None):
     """
     Lista todas las notas con nombres de materia, estudiante y profesor.
+    Permite filtrar por materia o estudiante.
     """
-    notas = (
+    query = (
         db.query(Nota)
         .options(
             joinedload(Nota.materia).joinedload(Materia.profesor).joinedload(Profesor.persona),
             joinedload(Nota.estudiante).joinedload(Estudiante.persona)
         )
-        .all()
     )
+
+    # 🔍 Filtros opcionales
+    if materia and materia.strip():
+        query = query.join(Materia).filter(func.lower(Materia.nombre).ilike(f"%{materia.lower()}%"))
+
+    if estudiante and estudiante.strip():
+        query = query.join(Estudiante).join(Persona).filter(
+            func.lower(Persona.nombre).ilike(f"%{estudiante.lower()}%")
+        )
+
+    notas = query.all()
 
     resultado = []
     for n in notas:
@@ -66,7 +78,6 @@ def listar_notas(db: Session):
         })
 
     return resultado
-
 
 def actualizar_nota(
     db: Session,
