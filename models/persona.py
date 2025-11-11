@@ -18,7 +18,7 @@ class Persona(Base):
     fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
     fecha_edicion = Column(DateTime(timezone=True), onupdate=func.now())
 
-    # ✅ Relación con Profesor
+    # Relación con Profesor
     profesor = relationship("Profesor", back_populates="persona", uselist=False)
 
     def __repr__(self):

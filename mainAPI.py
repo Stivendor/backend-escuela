@@ -7,6 +7,9 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+# Base de datos
+from database.config import create_tables
+
 # Importar routers
 from apis import (
     auditoria,
@@ -20,10 +23,9 @@ from apis import (
     usuario,
 )
 
-# Base de datos
-from database.config import create_tables
-
-
+# -------------------------------------------------------
+# ✅ CREACIÓN DE LA APP
+# -------------------------------------------------------
 app = FastAPI(
     title="Sistema de Gestión Escolar",
     description=(
@@ -35,15 +37,25 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+# -------------------------------------------------------
+# ✅ CONFIGURACIÓN DE CORS (debe ir ANTES de los routers)
+# -------------------------------------------------------
+origins = [
+    "http://localhost:4200",   # Angular local
+    "http://127.0.0.1:4200",   # Variante alternativa
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200"],  # 👈 URL de tu frontend Angular
+    allow_origins=origins,          # dominios permitidos
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],            # GET, POST, PUT, DELETE, etc.
+    allow_headers=["*"],            # headers personalizados
 )
 
-
+# -------------------------------------------------------
+# ✅ INCLUSIÓN DE ROUTERS
+# -------------------------------------------------------
 app.include_router(auditoria.router, prefix="/auditorias", tags=["Auditoría"])
 app.include_router(estudiante.router, prefix="/estudiantes", tags=["Estudiantes"])
 app.include_router(grupo.router, prefix="/grupos", tags=["Grupos"])
@@ -54,6 +66,9 @@ app.include_router(persona.router, prefix="/personas", tags=["Personas"])
 app.include_router(profesor.router, prefix="/profesores", tags=["Profesores"])
 app.include_router(usuario.router, prefix="/usuarios", tags=["Usuarios"])
 
+# -------------------------------------------------------
+# ✅ EVENTOS Y RAÍZ
+# -------------------------------------------------------
 @app.on_event("startup")
 async def startup_event():
     """Evento de inicio de la aplicación."""
@@ -62,6 +77,7 @@ async def startup_event():
     create_tables()
     print("Sistema listo para usar.")
     print("Documentación disponible en: http://localhost:8000/docs")
+
 
 @app.get("/", tags=["Raíz"])
 async def root():
@@ -84,6 +100,9 @@ async def root():
         },
     }
 
+# -------------------------------------------------------
+# ✅ EJECUCIÓN LOCAL
+# -------------------------------------------------------
 def main():
     """Función principal para ejecutar el servidor FastAPI."""
     print("Iniciando servidor FastAPI...")

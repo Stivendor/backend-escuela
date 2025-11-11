@@ -8,11 +8,16 @@ router = APIRouter()
 
 
 @router.get("/", response_model=list[NotaResponse])
-def listar_notas(db: Session = Depends(get_db)):
+def listar_notas(
+    db: Session = Depends(get_db),
+    materia: str | None = None,
+    estudiante: str | None = None
+):
     """
-    Lista todas las notas.
+    Lista todas las notas y permite filtrar por nombre de materia o estudiante.
     """
-    return crud_nota.listar_notas(db)
+    return crud_nota.listar_notas(db, materia=materia, estudiante=estudiante)
+
 
 
 

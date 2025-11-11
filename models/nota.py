@@ -21,7 +21,7 @@ class Nota(Base):
 
     profesor_id = Column(
         UUID(as_uuid=True),
-        ForeignKey("profesores.id_profesor", ondelete="SET NULL"),  # ✅ más seguro
+        ForeignKey("profesores.id_profesor", ondelete="SET NULL"),
         nullable=True,
     )
 
@@ -35,7 +35,7 @@ class Nota(Base):
 
     fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
 
-    # 🔹 Relaciones bidireccionales
+    # Relaciones bidireccionales
     estudiante = relationship("Estudiante", back_populates="notas")
     profesor = relationship("Profesor", back_populates="notas")
     materia = relationship("Materia", back_populates="notas")
