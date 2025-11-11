@@ -5,7 +5,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-# 🔹 Tabla intermedia para relación muchos-a-muchos entre materias y estudiantes
+#  Tabla intermedia para relación muchos-a-muchos entre materias y estudiantes
 materia_estudiante = Table(
     "materia_estudiante",
     Base.metadata,
@@ -38,22 +38,22 @@ class Materia(Base):
 
     profesor_id = Column(
         UUID(as_uuid=True),
-        ForeignKey("profesores.id_profesor", ondelete="SET NULL"),  # ✅ mejor manejo si se borra el profe
+        ForeignKey("profesores.id_profesor", ondelete="SET NULL"),  # mejor manejo si se borra el profe
         nullable=True,
     )
 
-    # 🔹 Relación bidireccional con Profesor
+    #  Relación bidireccional con Profesor
     profesor = relationship("Profesor", back_populates="materias")
 
-    # 🔹 Relación muchos-a-muchos con Estudiante
+    #  Relación muchos-a-muchos con Estudiante
     estudiantes = relationship(
     "Estudiante",
     secondary="materia_estudiante",
-    back_populates="materias"  # 👈 CAMBIO AQUÍ
+    back_populates="materias"
 )
 
 
-    # 🔹 Relación uno-a-muchos con Nota
+    #  Relación uno-a-muchos con Nota
     notas = relationship("Nota", back_populates="materia", cascade="all, delete-orphan")
 
     def __repr__(self):

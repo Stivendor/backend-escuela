@@ -4,7 +4,6 @@ from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
-
 class Estudiante(Base):
     __tablename__ = "estudiantes"
 
@@ -17,17 +16,17 @@ class Estudiante(Base):
     carrera = Column(String(100), nullable=False)
     semestre = Column(Integer, nullable=False)
 
-    # 🔹 Relaciones
+    # Relaciones
     persona = relationship("Persona", backref="estudiante")
 
-    # ✅ Relación con Nota (imprescindible)
+    # Relación con Nota (imprescindible)
     notas = relationship("Nota", back_populates="estudiante", cascade="all, delete-orphan")
 
-    # ✅ Relación con Materia (por la tabla intermedia materia_estudiante)
+    # Relación con Materia (por la tabla intermedia materia_estudiante)
     materias = relationship(
     "Materia",
     secondary="materia_estudiante",
-    back_populates="estudiantes"  # 👈 CAMBIO AQUÍ
+    back_populates="estudiantes"
 )
 
 

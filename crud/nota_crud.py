@@ -14,7 +14,7 @@ def create_nota(db: Session, estudiante_id: str, materia_id: str, valor: float, 
     nueva_nota = Nota(
         estudiante_id=estudiante_id,
         materia_id=materia_id,
-        profesor_id=profesor_id,  # ✅ ahora lo guarda correctamente
+        profesor_id=profesor_id,
         valor=valor
     )
     db.add(nueva_nota)
@@ -37,7 +37,7 @@ def listar_notas(db: Session, materia: str | None = None, estudiante: str | None
         )
     )
 
-    # 🔍 Filtros opcionales
+    # Filtros opcionales
     if materia and materia.strip():
         query = query.join(Materia).filter(func.lower(Materia.nombre).ilike(f"%{materia.lower()}%"))
 
