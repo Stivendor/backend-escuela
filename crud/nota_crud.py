@@ -32,8 +32,9 @@ def listar_notas(db: Session, materia: str | None = None, estudiante: str | None
     query = (
         db.query(Nota)
         .options(
-            joinedload(Nota.materia).joinedload(Materia.profesor).joinedload(Profesor.persona),
-            joinedload(Nota.estudiante).joinedload(Estudiante.persona)
+            joinedload(Nota.materia),
+            joinedload(Nota.estudiante).joinedload(Estudiante.persona),
+            joinedload(Nota.profesor).joinedload(Profesor.persona)
         )
     )
 
@@ -66,13 +67,13 @@ def listar_notas(db: Session, materia: str | None = None, estudiante: str | None
             ),
 
             "profesor_id": (
-                n.materia.profesor_id
-                if n.materia and n.materia.profesor_id
+                n.profesor_id
+                if n.profesor_id
                 else None
             ),
             "profesor_nombre": (
-                n.materia.profesor.persona.nombre
-                if n.materia and n.materia.profesor and n.materia.profesor.persona
+                n.profesor.persona.nombre
+                if n.profesor and n.profesor.persona
                 else "Sin profesor asignado"
             ),
         })
