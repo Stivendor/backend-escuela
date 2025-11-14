@@ -31,8 +31,20 @@ def create_materia(
     return materia
 
 
-def listar_materias(db: Session):
-    materias = db.query(Materia).all()
+def listar_materias(db: Session, nombre: str | None = None):
+    """
+    Lista todas las materias registradas.
+    Si se envía el parámetro 'nombre', filtra por coincidencia parcial (insensible a mayúsculas).
+    """
+    query = db.query(Materia)
+
+    #Filtrar por nombre si se envía
+    if nombre:
+        query = query.filter(Materia.nombre.ilike(f"%{nombre}%"))
+
+    materias = query.all()
+
+    # (Opcional: mantener el print para depurar)
     for m in materias:
         profesor_nombre = (
             m.profesor.persona.nombre if m.profesor else "Sin profesor asignado"
@@ -46,8 +58,8 @@ def listar_materias(db: Session):
         Profesor: {profesor_nombre}
         """
         )
-    return materias
 
+    return materias
 
 def actualizar_materia(
     db: Session,

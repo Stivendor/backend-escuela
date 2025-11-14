@@ -1,0 +1,68 @@
+# ---- PYTHON BASICS ----
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.egg
+*.egg-info/
+dist/
+build/
+develop-eggs/
+
+# ---- ENVIRONMENTS ----
+.env
+.env.*
+.venv/
+venv/
+env/
+ENV/
+
+# ---- IDE / EDITOR ----
+.vscode/
+.idea/
+*.iml
+
+# ---- LOGS ----
+*.log
+logs/
+*.out
+*.err
+
+# ---- DATABASE / SQLITE ----
+*.sqlite3
+*.db
+*.db-journal
+
+# ---- CACHE & TOOLING ----
+.cache/
+pytest_cache/
+coverage.xml
+htmlcov/
+.mypy_cache/
+.pytest_cache/
+.pyre/
+__pypackages__/
+
+# ---- DOCKER ----
+*.pid
+*.seed
+docker-data/
+
+# ---- MISC ----
+*.swp
+*.swo
+*.DS_Store
+Thumbs.db
+
+# ---- FASTAPI / SQLALCHEMY ----
+migrations/versions/*.pyc
+migrations/__pycache__/
+migrations/versions/__pycache__/
+
+# ---- SECURITY ----
+*.key
+*.pem
+
+# ---- LOCAL CONFIG ----
+config.local.json

@@ -25,11 +25,13 @@ def crear_materia(materia: MateriaCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/", response_model=list[MateriaResponse])
-def listar_materias(db: Session = Depends(get_db)):
+def listar_materias(nombre: str | None = None, db: Session = Depends(get_db)):
     """
     Lista todas las materias registradas.
+    Si se envía el parámetro 'nombre', filtra por coincidencia parcial.
     """
-    return crud_materia.listar_materias(db)
+    return crud_materia.listar_materias(db, nombre)
+
 
 
 @router.get("/{materia_id}", response_model=MateriaResponse)
