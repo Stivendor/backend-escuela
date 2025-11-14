@@ -241,6 +241,7 @@ class NotaBase(BaseModel):
     """
     Campos base para Nota (comunes entre creación y actualización)
     """
+
     valor: float
     materia_id: Optional[UUID] = None
     estudiante_id: Optional[UUID] = None
@@ -253,6 +254,7 @@ class NotaCreate(BaseModel):
     Requiere estudiante_id, materia_id y valor.
     El profesor puede especificarse manualmente o inferirse.
     """
+
     estudiante_id: UUID
     materia_id: UUID
     valor: float
@@ -264,6 +266,7 @@ class NotaUpdate(BaseModel):
     Schema para actualizar una Nota.
     Todos los campos son opcionales.
     """
+
     valor: Optional[float] = None
     materia_id: Optional[UUID] = None
     estudiante_id: Optional[UUID] = None
@@ -274,6 +277,7 @@ class NotaResponse(BaseModel):
     """
     Respuesta de Nota con relaciones opcionales.
     """
+
     id_nota: UUID
     valor: float
     fecha_creacion: datetime
@@ -299,7 +303,8 @@ class GrupoBase(BaseModel):
     nombre: str
     materia_id: UUID
     profesor_id: UUID
-    periodo_id: UUID
+    # 🔹 ahora periodo_id es OPCIONAL
+    periodo_id: Optional[UUID] = None
 
 
 class GrupoCreate(GrupoBase):
@@ -313,10 +318,13 @@ class GrupoCreate(GrupoBase):
 class GrupoUpdate(BaseModel):
     """
     Schema para actualización de Grupo.
-    Solo permite cambiar el nombre.
+    Ahora permite cambiar varios campos opcionalmente.
     """
 
     nombre: Optional[str] = None
+    materia_id: Optional[UUID] = None
+    profesor_id: Optional[UUID] = None
+    periodo_id: Optional[UUID] = None
 
 
 class GrupoResponse(GrupoBase):
