@@ -239,40 +239,56 @@ class MateriaResponse(MateriaBase):
 # ==================== NOTA ====================
 class NotaBase(BaseModel):
     """
-    Schema base para Nota.
+    Campos base para Nota (comunes entre creación y actualización)
+    """
+
+    valor: float
+    materia_id: Optional[UUID] = None
+    estudiante_id: Optional[UUID] = None
+    profesor_id: Optional[UUID] = None
+
+
+class NotaCreate(BaseModel):
+    """
+    Schema para la creación de una Nota.
+    Requiere estudiante_id, materia_id y valor.
+    El profesor puede especificarse manualmente o inferirse.
     """
 
     estudiante_id: UUID
     materia_id: UUID
     valor: float
-    profesor_id: Optional[UUID] = None
-
-
-class NotaCreate(NotaBase):
-    """
-    Schema para la creación de una Nota.
-    """
-
-    pass
+    profesor_id: Optional[UUID] = None  # ✅ agregado
 
 
 class NotaUpdate(BaseModel):
     """
     Schema para actualizar una Nota.
-    Solo el valor es obligatorio de modificar.
+    Todos los campos son opcionales.
     """
 
     valor: Optional[float] = None
+    materia_id: Optional[UUID] = None
+    estudiante_id: Optional[UUID] = None
+    profesor_id: Optional[UUID] = None
 
 
-class NotaResponse(NotaBase):
+class NotaResponse(BaseModel):
     """
-    Schema de respuesta para Nota.
-    Incluye ID y fecha de creación.
+    Respuesta de Nota con relaciones opcionales.
     """
 
     id_nota: UUID
+    valor: float
     fecha_creacion: datetime
+
+    materia_id: Optional[UUID]
+    estudiante_id: Optional[UUID]
+    profesor_id: Optional[UUID]
+
+    materia_nombre: Optional[str] = None
+    estudiante_nombre: Optional[str] = None
+    profesor_nombre: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -287,7 +303,8 @@ class GrupoBase(BaseModel):
     nombre: str
     materia_id: UUID
     profesor_id: UUID
-    periodo_id: UUID
+    # 🔹 ahora periodo_id es OPCIONAL
+    periodo_id: Optional[UUID] = None
 
 
 class GrupoCreate(GrupoBase):
@@ -301,10 +318,13 @@ class GrupoCreate(GrupoBase):
 class GrupoUpdate(BaseModel):
     """
     Schema para actualización de Grupo.
-    Solo permite cambiar el nombre.
+    Ahora permite cambiar varios campos opcionalmente.
     """
 
     nombre: Optional[str] = None
+    materia_id: Optional[UUID] = None
+    profesor_id: Optional[UUID] = None
+    periodo_id: Optional[UUID] = None
 
 
 class GrupoResponse(GrupoBase):

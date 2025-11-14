@@ -1,7 +1,8 @@
 import uuid
 from database.config import Base
-from sqlalchemy import Column, DateTime, String, Integer
+from sqlalchemy import Column, DateTime, String
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 
@@ -16,6 +17,9 @@ class Persona(Base):
     telefono = Column(String(50), nullable=False)
     fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
     fecha_edicion = Column(DateTime(timezone=True), onupdate=func.now())
+
+    # Relación con Profesor
+    profesor = relationship("Profesor", back_populates="persona", uselist=False)
 
     def __repr__(self):
         return f"<Persona(id_persona={self.id_persona}, nombre='{self.nombre}')>"

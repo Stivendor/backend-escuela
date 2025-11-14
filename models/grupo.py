@@ -1,3 +1,4 @@
+# models/grupo.py
 import uuid
 
 from database.config import Base
@@ -6,6 +7,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
+# Tabla intermedia grupo-estudiante
 grupo_estudiante = Table(
     "grupo_estudiante",
     Base.metadata,
@@ -38,6 +40,11 @@ class Grupo(Base):
         UUID(as_uuid=True), ForeignKey("profesores.id_profesor"), nullable=False
     )
 
+    # ⬇⬇⬇ IMPORTANTE: ahora periodo_id es OPCIONAL
+    periodo_id = Column(
+        UUID(as_uuid=True), ForeignKey("periodos.id_periodo"), nullable=True
+    )
+
     materia = relationship("Materia", backref="grupos")
     profesor = relationship("Profesor", backref="grupos")
     estudiantes = relationship(
@@ -46,11 +53,7 @@ class Grupo(Base):
         backref="grupos",
     )
 
+    periodo = relationship("Periodo", back_populates="grupos")
+
     def __repr__(self):
         return f"<Grupo(id_grupo={self.id_grupo}, nombre='{self.nombre}')>"
-
-    periodo_id = Column(
-        UUID(as_uuid=True), ForeignKey("periodos.id_periodo"), nullable=False
-    )
-
-    periodo = relationship("Periodo", back_populates="grupos")
