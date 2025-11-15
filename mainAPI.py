@@ -6,7 +6,7 @@ API REST con FastAPI, SQLAlchemy y PostgreSQL (Neon)
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
+from apis import auth
 # Base de datos
 from database.config import create_tables
 
@@ -116,3 +116,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+app.include_router(auth.router)
